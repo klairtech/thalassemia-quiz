@@ -571,14 +571,30 @@ export function ResultScreen({
                                 )
                                   ? (() => {
                                       // Special handling for "All of the above" in multi-select questions
-                                      if (question.question_type === "multi_select" && 
-                                          optionIndex === question.options.length - 1 &&
-                                          question.options[question.options.length - 1].toLowerCase().includes("all of the above")) {
+                                      if (
+                                        question.question_type ===
+                                          "multi_select" &&
+                                        optionIndex ===
+                                          question.options.length - 1 &&
+                                        question.options[
+                                          question.options.length - 1
+                                        ]
+                                          .toLowerCase()
+                                          .includes("all of the above")
+                                      ) {
                                         // "All of the above" is correct if all other options are correct
-                                        return question.correct_answer.length === question.options.length - 1 &&
-                                          question.correct_answer.every((ans) => ans < question.options.length - 1);
+                                        return (
+                                          question.correct_answer.length ===
+                                            question.options.length - 1 &&
+                                          question.correct_answer.every(
+                                            (ans) =>
+                                              ans < question.options.length - 1
+                                          )
+                                        );
                                       }
-                                      return question.correct_answer.includes(optionIndex);
+                                      return question.correct_answer.includes(
+                                        optionIndex
+                                      );
                                     })()
                                   : question.correct_answer === optionIndex;
 

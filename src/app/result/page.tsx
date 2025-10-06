@@ -142,13 +142,12 @@ export default function ResultPage() {
     router.push("/");
   };
 
-
   const handleUserInfoSubmit = async () => {
     setIsSubmitting(true);
     setSaveError(null);
     setSaveSuccess(false);
     setAutoSubmitTimer(0); // Stop the timer
-    
+
     try {
       // Get result data from sessionStorage
       const resultDataStr = sessionStorage.getItem("quizResult");
@@ -209,23 +208,23 @@ export default function ResultPage() {
   }
 
   return (
-        <ResultScreen
-          result={result}
-          userName={userName}
-          onRetakeQuiz={handleRetakeQuiz}
-          questions={questions}
-          answers={answers}
-          showUserInfoForm={showUserInfoForm}
-          userMobile={userMobile}
-          userEmail={userEmail}
-          onMobileChange={setUserMobile}
-          onEmailChange={setUserEmail}
-          onUserInfoSubmit={handleUserInfoSubmit}
-          isSubmitting={isSubmitting}
-          saveError={saveError}
-          saveSuccess={saveSuccess}
-          autoSubmitTimer={autoSubmitTimer}
-          isAutoSubmitting={isAutoSubmitting}
-        />
+    <ResultScreen
+      result={result}
+      userName={userName}
+      onRetakeQuiz={handleRetakeQuiz}
+      questions={questions}
+      answers={answers}
+      showUserInfoForm={showUserInfoForm}
+      userMobile={userMobile}
+      userEmail={userEmail}
+      onMobileChange={setUserMobile}
+      onEmailChange={setUserEmail}
+      onUserInfoSubmit={handleUserInfoSubmit}
+      isSubmitting={isSubmitting}
+      saveError={saveError}
+      saveSuccess={saveSuccess}
+      autoSubmitTimer={autoSubmitTimer}
+      isAutoSubmitting={isAutoSubmitting}
+    />
   );
 }

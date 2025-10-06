@@ -86,8 +86,8 @@ export function AppHeader({
                 size="sm"
                 onClick={() => router.push("/learn")}
                 className={`flex items-center gap-2 ${
-                  isLeaderboardPage 
-                    ? "bg-gradient-to-r from-[#f14164] to-[#d6335a] hover:from-[#d6335a] hover:to-[#c22d4f] text-white shadow-lg hover:shadow-xl" 
+                  isLeaderboardPage
+                    ? "bg-gradient-to-r from-[#f14164] to-[#d6335a] hover:from-[#d6335a] hover:to-[#c22d4f] text-white shadow-lg hover:shadow-xl"
                     : ""
                 }`}
               >

@@ -56,19 +56,30 @@ export function QuizCard({
     const isCorrect = Array.isArray(selectedAnswers)
       ? (() => {
           // Check if user selected "All of the above" (last option) in a multi-select question
-          if (question.question_type === "multi_select" && 
-              selectedAnswers.length === 1 && 
-              selectedAnswers[0] === question.options.length - 1 &&
-              question.options[question.options.length - 1].toLowerCase().includes("all of the above")) {
+          if (
+            question.question_type === "multi_select" &&
+            selectedAnswers.length === 1 &&
+            selectedAnswers[0] === question.options.length - 1 &&
+            question.options[question.options.length - 1]
+              .toLowerCase()
+              .includes("all of the above")
+          ) {
             // For "All of the above" in multi-select, check if all other options are correct
-            const allOtherOptionsCorrect = question.correct_answer.length === question.options.length - 1 &&
-              question.correct_answer.every((ans) => ans < question.options.length - 1);
+            const allOtherOptionsCorrect =
+              question.correct_answer.length === question.options.length - 1 &&
+              question.correct_answer.every(
+                (ans) => ans < question.options.length - 1
+              );
             return allOtherOptionsCorrect;
           }
-          
+
           // Standard validation: exact match
-          return question.correct_answer.length === selectedAnswers.length &&
-            question.correct_answer.every((ans) => selectedAnswers.includes(ans));
+          return (
+            question.correct_answer.length === selectedAnswers.length &&
+            question.correct_answer.every((ans) =>
+              selectedAnswers.includes(ans)
+            )
+          );
         })()
       : question.correct_answer.length === 1 &&
         question.correct_answer[0] === selectedAnswers;

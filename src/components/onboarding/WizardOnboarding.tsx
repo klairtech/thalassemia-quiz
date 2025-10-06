@@ -322,7 +322,7 @@ export function WizardOnboarding({ onSubmit }: WizardOnboardingProps) {
                         <BookOpen className="mr-2 h-4 w-4" />
                         Learn About Thalassemia
                       </Button>
-                      
+
                       <Button
                         type="button"
                         variant="outline"
