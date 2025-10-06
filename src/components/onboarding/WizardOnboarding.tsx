@@ -306,12 +306,12 @@ export function WizardOnboarding({ onSubmit }: WizardOnboardingProps) {
                       </motion.div>
                     </form>
 
-                    {/* Compact Learn About Thalassemia Button */}
+                    {/* Compact Action Buttons */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1.0 }}
-                      className="mt-4"
+                      className="mt-4 space-y-3"
                     >
                       <Button
                         type="button"
@@ -321,6 +321,16 @@ export function WizardOnboarding({ onSubmit }: WizardOnboardingProps) {
                       >
                         <BookOpen className="mr-2 h-4 w-4" />
                         Learn About Thalassemia
+                      </Button>
+                      
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => router.push("/leaderboard")}
+                        className="w-full border-2 border-rose-200 text-rose-700 hover:bg-rose-50 hover:border-rose-300 hover:shadow-md transition-all duration-300 py-2 text-sm font-light rounded-lg bg-white/80 backdrop-blur-sm"
+                      >
+                        <Trophy className="mr-2 h-4 w-4" />
+                        View Leaderboard
                       </Button>
                     </motion.div>
 

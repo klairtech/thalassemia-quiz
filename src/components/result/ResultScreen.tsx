@@ -180,6 +180,102 @@ export function ResultScreen({
           </motion.div>
         </div>
 
+        {/* User Info Collection Form */}
+        {showUserInfoForm && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
+            className="mt-8"
+          >
+            <Card className="bg-white/90 backdrop-blur-sm border border-white/20 rounded-2xl">
+              <CardHeader>
+                <CardTitle className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                  <Star className="h-6 w-6 text-[#f14164]" />
+                  Help Us Track Your Progress
+                </CardTitle>
+                <p className="text-gray-600">
+                  Provide your contact information to help us track quiz
+                  participation and send you updates about Thalassemia awareness
+                  (optional)
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Error Message */}
+                {saveError && (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">!</span>
+                      </div>
+                      <p className="text-red-700 font-medium">
+                        Failed to save quiz attempt
+                      </p>
+                    </div>
+                    <p className="text-red-600 text-sm mt-1">{saveError}</p>
+                  </div>
+                )}
+
+                {/* Success Message */}
+                {saveSuccess && (
+                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">✓</span>
+                      </div>
+                      <p className="text-green-700 font-medium">
+                        Quiz attempt saved successfully!
+                      </p>
+                    </div>
+                    <p className="text-green-600 text-sm mt-1">
+                      Your score has been recorded on the leaderboard.
+                    </p>
+                  </div>
+                )}
+
+                <div>
+                  <label
+                    htmlFor="mobile"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Mobile Number (Optional)
+                  </label>
+                  <input
+                    id="mobile"
+                    type="tel"
+                    value={userMobile}
+                    onChange={(e) => onMobileChange?.(e.target.value)}
+                    placeholder="Enter your mobile number"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f14164] focus:border-[#f14164] transition-colors"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Email Address (Optional)
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    value={userEmail}
+                    onChange={(e) => onEmailChange?.(e.target.value)}
+                    placeholder="Enter your email address"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f14164] focus:border-[#f14164] transition-colors"
+                  />
+                </div>
+                <div className="pt-4">
+                  <p className="text-sm text-gray-600 text-center">
+                    Click &quot;Save & Continue&quot; below to save your quiz
+                    results and continue exploring.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+
         {/* Action Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -187,6 +283,17 @@ export function ResultScreen({
           transition={{ duration: 0.5, delay: 0.4 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
+          {showUserInfoForm && (
+            <Button
+              onClick={onUserInfoSubmit}
+              disabled={isSubmitting}
+              size="lg"
+              className="flex items-center gap-2 bg-gradient-to-r from-[#f14164] to-[#d6335a] hover:from-[#d6335a] hover:to-[#c22d4f] text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              {isSubmitting ? "Saving..." : "Save & Continue"}
+            </Button>
+          )}
+
           <Button
             onClick={onRetakeQuiz}
             variant="outline"
@@ -403,112 +510,6 @@ export function ResultScreen({
                     </div>
                   );
                 })}
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
-
-        {/* User Info Collection Form */}
-        {showUserInfoForm && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="mt-8"
-          >
-            <Card className="bg-white/90 backdrop-blur-sm border border-white/20 rounded-2xl">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <Star className="h-6 w-6 text-[#f14164]" />
-                  Help Us Track Your Progress
-                </CardTitle>
-                <p className="text-gray-600">
-                  Provide your contact information to help us track quiz
-                  participation and send you updates about Thalassemia awareness
-                  (optional)
-                </p>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* Error Message */}
-                {saveError && (
-                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">!</span>
-                      </div>
-                      <p className="text-red-700 font-medium">
-                        Failed to save quiz attempt
-                      </p>
-                    </div>
-                    <p className="text-red-600 text-sm mt-1">{saveError}</p>
-                  </div>
-                )}
-
-                {/* Success Message */}
-                {saveSuccess && (
-                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">✓</span>
-                      </div>
-                      <p className="text-green-700 font-medium">
-                        Quiz attempt saved successfully!
-                      </p>
-                    </div>
-                    <p className="text-green-600 text-sm mt-1">
-                      Your score has been recorded on the leaderboard.
-                    </p>
-                  </div>
-                )}
-
-                <div>
-                  <label
-                    htmlFor="mobile"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Mobile Number (Optional)
-                  </label>
-                  <input
-                    id="mobile"
-                    type="tel"
-                    value={userMobile}
-                    onChange={(e) => onMobileChange?.(e.target.value)}
-                    placeholder="Enter your mobile number"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f14164] focus:border-[#f14164] transition-colors"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Email Address (Optional)
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={userEmail}
-                    onChange={(e) => onEmailChange?.(e.target.value)}
-                    placeholder="Enter your email address"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f14164] focus:border-[#f14164] transition-colors"
-                  />
-                </div>
-                <div className="flex gap-3 pt-4">
-                  <Button
-                    onClick={onUserInfoSubmit}
-                    disabled={isSubmitting}
-                    className="flex-1 bg-gradient-to-r from-[#f14164] to-[#d6335a] hover:from-[#d6335a] hover:to-[#c22d4f] text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    {isSubmitting ? "Saving..." : "Save & Continue"}
-                  </Button>
-                  <Button
-                    onClick={() => onUserInfoSubmit?.()}
-                    variant="outline"
-                    className="px-6 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-3 rounded-xl transition-all duration-300"
-                  >
-                    Skip
-                  </Button>
-                </div>
               </CardContent>
             </Card>
           </motion.div>
