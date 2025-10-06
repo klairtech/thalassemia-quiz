@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { Home, BookOpen, Trophy, ArrowLeft, RotateCcw } from "lucide-react";
+import { Home, BookOpen, Trophy, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 
 interface AppHeaderProps {
@@ -22,7 +22,6 @@ export function AppHeader({
   const isHomePage = pathname === "/";
   const isLearnPage = pathname === "/learn";
   const isQuizPage = pathname === "/quiz";
-  const isWheelPage = pathname === "/wheel";
   const isLeaderboardPage = pathname === "/leaderboard";
 
   return (
@@ -104,17 +103,6 @@ export function AppHeader({
               </Button>
             )}
 
-            {!isWheelPage && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => router.push("/wheel")}
-                className="flex items-center gap-2"
-              >
-                <RotateCcw className="h-4 w-4" />
-                Spin the Wheel
-              </Button>
-            )}
 
             {!isLeaderboardPage && (
               <Button

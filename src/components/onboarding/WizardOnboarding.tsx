@@ -534,7 +534,7 @@ export function WizardOnboarding({ onSubmit }: WizardOnboardingProps) {
                               100%
                             </div>
                             <div className="text-xs text-gray-600 font-light">
-                              Free Service
+                              For Nation Building
                             </div>
                           </motion.div>
                         </div>

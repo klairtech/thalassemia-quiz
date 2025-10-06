@@ -8,13 +8,11 @@ import { formatTime } from "@/lib/utils";
 
 interface LeaderboardTableProps {
   entries: LeaderboardEntry[];
-  currentUserEntry?: LeaderboardEntry & { rank: number };
   isLoading?: boolean;
 }
 
 export function LeaderboardTable({
   entries,
-  currentUserEntry,
   isLoading,
 }: LeaderboardTableProps) {
   const getRankIcon = (rank: number) => {
@@ -132,22 +130,16 @@ export function LeaderboardTable({
           <div className="space-y-2">
             {entries.map((entry, index) => {
               const rank = index + 1;
-              const isCurrentUser =
-                currentUserEntry &&
-                (entry.user_mobile === currentUserEntry.user_mobile ||
-                  entry.user_email === currentUserEntry.user_email);
 
               return (
                 <motion.div
-                  key={`${entry.user_mobile}-${entry.user_email}`}
+                  key={entry.user_hash}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className={`flex items-center justify-between p-4 rounded-lg border-2 transition-all ${
-                    isCurrentUser
-                      ? "bg-blue-50 border-blue-300 shadow-md"
-                      : getRankColor(rank)
-                  }`}
+                  className={`flex items-center justify-between p-4 rounded-lg border-2 transition-all ${getRankColor(
+                    rank
+                  )}`}
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex items-center justify-center w-8">
@@ -156,14 +148,6 @@ export function LeaderboardTable({
                     <div>
                       <div className="font-semibold text-gray-800">
                         {entry.user_name}
-                        {isCurrentUser && (
-                          <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                            You
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {entry.user_mobile}
                       </div>
                     </div>
                   </div>
