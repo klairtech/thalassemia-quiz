@@ -6,6 +6,24 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get('limit') || '50')
 
+    // Check if required environment variables are available
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      throw new Error('NEXT_PUBLIC_SUPABASE_URL environment variable is not set')
+    }
+    
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('SUPABASE_SERVICE_ROLE_KEY environment variable is not set')
+    }
+
+    // Debug environment variables in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Environment check:', {
+        hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+        hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+        nodeEnv: process.env.NODE_ENV
+      })
+    }
+
     // First try to query the leaderboard view
     const { data, error } = await supabaseServer
       .from('leaderboard')
@@ -64,8 +82,25 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ entries: leaderboardData || [] })
   } catch (error) {
     console.error('Leaderboard API error:', error)
+    
+    // Provide more specific error information for debugging
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+    const errorDetails = {
+      message: errorMessage,
+      timestamp: new Date().toISOString(),
+      error: error instanceof Error ? {
+        name: error.name,
+        stack: error.stack
+      } : null
+    }
+    
+    console.error('Detailed error info:', errorDetails)
+    
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to fetch leaderboard' },
+      { 
+        error: 'Failed to fetch leaderboard',
+        details: process.env.NODE_ENV === 'development' ? errorDetails : undefined
+      },
       { status: 500 }
     )
   }
