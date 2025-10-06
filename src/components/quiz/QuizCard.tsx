@@ -56,7 +56,7 @@ export function QuizCard({
     const isCorrect = Array.isArray(selectedAnswers)
       ? question.correct_answer.length === selectedAnswers.length &&
         question.correct_answer.every((ans) => selectedAnswers.includes(ans))
-      : question.correct_answer.length === 1 && 
+      : question.correct_answer.length === 1 &&
         question.correct_answer[0] === selectedAnswers;
 
     const answer: QuizAnswer = {
@@ -121,15 +121,15 @@ export function QuizCard({
             {question.options.map((option, index) => (
               <motion.button
                 key={index}
-                  className={`w-full p-4 rounded-lg border-2 text-left transition-all duration-200 ${
-                    Array.isArray(selectedAnswers)
-                      ? selectedAnswers.includes(index)
-                        ? "border-red-500 bg-red-50"
-                        : "border-gray-200 hover:border-gray-300"
-                      : selectedAnswers === index
+                className={`w-full p-4 rounded-lg border-2 text-left transition-all duration-200 ${
+                  Array.isArray(selectedAnswers)
+                    ? selectedAnswers.includes(index)
                       ? "border-red-500 bg-red-50"
                       : "border-gray-200 hover:border-gray-300"
-                  }`}
+                    : selectedAnswers === index
+                    ? "border-red-500 bg-red-50"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
                 onClick={() => handleAnswerSelect(index)}
                 disabled={isAnswered}
                 whileHover={{ scale: isAnswered ? 1 : 1.02 }}

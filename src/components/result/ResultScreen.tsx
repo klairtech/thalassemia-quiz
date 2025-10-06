@@ -22,6 +22,8 @@ interface ResultScreenProps {
   onEmailChange?: (email: string) => void;
   onUserInfoSubmit?: () => void;
   isSubmitting?: boolean;
+  saveError?: string | null;
+  saveSuccess?: boolean;
 }
 
 export function ResultScreen({
@@ -39,6 +41,8 @@ export function ResultScreen({
   onEmailChange,
   onUserInfoSubmit,
   isSubmitting = false,
+  saveError = null,
+  saveSuccess = false,
 }: ResultScreenProps) {
   const getGradeColor = (grade: string) => {
     switch (grade) {
@@ -425,6 +429,38 @@ export function ResultScreen({
                 </p>
               </CardHeader>
               <CardContent className="space-y-4">
+                {/* Error Message */}
+                {saveError && (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">!</span>
+                      </div>
+                      <p className="text-red-700 font-medium">
+                        Failed to save quiz attempt
+                      </p>
+                    </div>
+                    <p className="text-red-600 text-sm mt-1">{saveError}</p>
+                  </div>
+                )}
+
+                {/* Success Message */}
+                {saveSuccess && (
+                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">✓</span>
+                      </div>
+                      <p className="text-green-700 font-medium">
+                        Quiz attempt saved successfully!
+                      </p>
+                    </div>
+                    <p className="text-green-600 text-sm mt-1">
+                      Your score has been recorded on the leaderboard.
+                    </p>
+                  </div>
+                )}
+
                 <div>
                   <label
                     htmlFor="mobile"

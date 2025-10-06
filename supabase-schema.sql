@@ -45,6 +45,9 @@ FROM quiz_attempts
 GROUP BY user_mobile, user_email, user_name
 ORDER BY best_score DESC, best_time ASC;
 
+-- Enable RLS on leaderboard view
+ALTER VIEW leaderboard SET (security_invoker = true);
+
 -- Indexes for better performance
 CREATE INDEX idx_quiz_questions_difficulty ON quiz_questions(difficulty);
 CREATE INDEX idx_quiz_questions_category ON quiz_questions(category);
@@ -81,3 +84,4 @@ CREATE POLICY "Allow public insert access to quiz attempts" ON quiz_attempts
 -- Allow public read access to quiz attempts (for leaderboard)
 CREATE POLICY "Allow public read access to quiz attempts" ON quiz_attempts
     FOR SELECT USING (true);
+

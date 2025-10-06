@@ -29,6 +29,8 @@ export default function ResultPage() {
   const [userMobile, setUserMobile] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
     const processResult = async () => {
@@ -73,6 +75,8 @@ export default function ResultPage() {
     email: string = ""
   ) => {
     try {
+      setSaveError(null);
+
       const attempt: Omit<QuizAttempt, "id" | "created_at"> = {
         user_name: resultData.userName,
         user_mobile: mobile,
@@ -94,10 +98,22 @@ export default function ResultPage() {
       });
 
       if (!response.ok) {
-        console.error("Failed to save quiz attempt");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error ||
+            `HTTP ${response.status}: Failed to save quiz attempt`
+        );
       }
+
+      const result = await response.json();
+      setSaveSuccess(true);
+      return result;
     } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to save quiz attempt";
+      setSaveError(errorMessage);
       console.error("Error saving quiz attempt:", err);
+      throw err;
     }
   };
 
@@ -116,6 +132,9 @@ export default function ResultPage() {
 
   const handleUserInfoSubmit = async () => {
     setIsSubmitting(true);
+    setSaveError(null);
+    setSaveSuccess(false);
+
     try {
       // Get result data from sessionStorage
       const resultDataStr = sessionStorage.getItem("quizResult");
@@ -128,6 +147,7 @@ export default function ResultPage() {
       }
     } catch (err) {
       console.error("Error saving user info:", err);
+      // Error is already handled in saveQuizAttempt
     } finally {
       setIsSubmitting(false);
     }
@@ -187,6 +207,8 @@ export default function ResultPage() {
       onEmailChange={setUserEmail}
       onUserInfoSubmit={handleUserInfoSubmit}
       isSubmitting={isSubmitting}
+      saveError={saveError}
+      saveSuccess={saveSuccess}
     />
   );
 }
