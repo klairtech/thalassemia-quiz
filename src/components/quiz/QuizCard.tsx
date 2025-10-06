@@ -52,11 +52,12 @@ export function QuizCard({
     const timeTaken = Math.floor(
       (new Date().getTime() - timeStarted.getTime()) / 1000
     );
-    const isCorrect = Array.isArray(question.correct_answer)
-      ? Array.isArray(selectedAnswers) &&
-        question.correct_answer.length === selectedAnswers.length &&
+    // Since correct_answer is always an array in the database
+    const isCorrect = Array.isArray(selectedAnswers)
+      ? question.correct_answer.length === selectedAnswers.length &&
         question.correct_answer.every((ans) => selectedAnswers.includes(ans))
-      : selectedAnswers === question.correct_answer;
+      : question.correct_answer.length === 1 && 
+        question.correct_answer[0] === selectedAnswers;
 
     const answer: QuizAnswer = {
       question_id: question.id,

@@ -11,7 +11,7 @@ export interface QuizQuestion {
   id: string
   question: string
   options: string[]
-  correct_answer: number | number[]
+  correct_answer: number[]
   question_type: 'mcq' | 'true_false' | 'multi_select'
   difficulty: 'easy' | 'medium' | 'hard'
   category: string
