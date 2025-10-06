@@ -437,16 +437,16 @@ export function ResultScreen({
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
-        >
-          <Button
-            onClick={onRetakeQuiz}
-            variant="outline"
-            size="lg"
-              className="flex items-center gap-3 border-2 border-gray-300 hover:border-[#f14164] hover:bg-[#f14164]/5 text-gray-700 hover:text-[#f14164] font-semibold px-6 py-3 text-base rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
           >
+            <Button
+              onClick={onRetakeQuiz}
+              variant="outline"
+              size="lg"
+              className="flex items-center gap-3 border-2 border-gray-300 hover:border-[#f14164] hover:bg-[#f14164]/5 text-gray-700 hover:text-[#f14164] font-semibold px-6 py-3 text-base rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
               <Target className="h-5 w-5" />
-            Retake Quiz
-          </Button>
+              Retake Quiz
+            </Button>
           </motion.div>
         </motion.div>
 
@@ -569,9 +569,17 @@ export function ResultScreen({
                                 const isCorrectOption = Array.isArray(
                                   question.correct_answer
                                 )
-                                  ? question.correct_answer.includes(
-                                      optionIndex
-                                    )
+                                  ? (() => {
+                                      // Special handling for "All of the above" in multi-select questions
+                                      if (question.question_type === "multi_select" && 
+                                          optionIndex === question.options.length - 1 &&
+                                          question.options[question.options.length - 1].toLowerCase().includes("all of the above")) {
+                                        // "All of the above" is correct if all other options are correct
+                                        return question.correct_answer.length === question.options.length - 1 &&
+                                          question.correct_answer.every((ans) => ans < question.options.length - 1);
+                                      }
+                                      return question.correct_answer.includes(optionIndex);
+                                    })()
                                   : question.correct_answer === optionIndex;
 
                                 return (
