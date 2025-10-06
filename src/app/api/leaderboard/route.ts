@@ -7,11 +7,13 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '50')
 
     // First try to query the leaderboard view
-    let { data, error } = await supabaseServer
+    const { data, error } = await supabaseServer
       .from('leaderboard')
       .select('*')
       .order('best_score', { ascending: false })
       .limit(limit)
+
+    let leaderboardData = data
 
     // If the view doesn't exist or has issues, fall back to direct query
     if (error && (error.message.includes('relation "leaderboard" does not exist') || error.message.includes('relation "public.leaderboard" does not exist'))) {
@@ -51,7 +53,7 @@ export async function GET(request: NextRequest) {
         }
       })
 
-      data = Array.from(userMap.values())
+      leaderboardData = Array.from(userMap.values())
         .sort((a, b) => b.best_score - a.best_score)
         .slice(0, limit)
     } else if (error) {
@@ -59,7 +61,7 @@ export async function GET(request: NextRequest) {
       throw new Error(`Database error: ${error.message}`)
     }
 
-    return NextResponse.json({ entries: data || [] })
+    return NextResponse.json({ entries: leaderboardData || [] })
   } catch (error) {
     console.error('Leaderboard API error:', error)
     return NextResponse.json(
