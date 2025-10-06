@@ -103,7 +103,6 @@ export function AppHeader({
               </Button>
             )}
 
-
             {!isLeaderboardPage && (
               <Button
                 variant="ghost"

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Trophy } from "lucide-react";
-import { supabase, QuizQuestion, QuizAnswer } from "@/lib/supabase";
+import { QuizQuestion, QuizAnswer } from "@/lib/supabase";
 import { QuizSession } from "@/lib/quiz";
 import { QuizCard } from "@/components/quiz/QuizCard";
 import { Timer } from "@/components/quiz/Timer";

@@ -269,7 +269,7 @@ export default function LearnPage() {
                     <div className="text-center p-4 bg-white rounded-lg">
                       <div className="text-2xl font-bold text-red-600">4%</div>
                       <div className="text-sm text-gray-600">
-                        of India's population are carriers
+                        of India&apos;s population are carriers
                       </div>
                     </div>
                     <div className="text-center p-4 bg-white rounded-lg">

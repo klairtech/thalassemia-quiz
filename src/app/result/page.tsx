@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { supabase, QuizAttempt, QuizAnswer } from "@/lib/supabase";
+import { QuizAttempt, QuizAnswer, QuizQuestion } from "@/lib/supabase";
 import { QuizService, QuizResult } from "@/lib/quiz";
 import { ResultScreen } from "@/components/result/ResultScreen";
 
@@ -14,7 +14,7 @@ interface QuizResultData {
   answers: QuizAnswer[];
   userName: string;
   language: string;
-  questions: any[]; // Add questions data for explanations
+  questions: QuizQuestion[]; // Add questions data for explanations
 }
 
 export default function ResultPage() {
@@ -23,8 +23,8 @@ export default function ResultPage() {
   const [userName, setUserName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [questions, setQuestions] = useState<any[]>([]);
-  const [answers, setAnswers] = useState<any[]>([]);
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   const [showUserInfoForm, setShowUserInfoForm] = useState(false);
   const [userMobile, setUserMobile] = useState("");
   const [userEmail, setUserEmail] = useState("");

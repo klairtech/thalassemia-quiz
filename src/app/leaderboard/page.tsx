@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, RefreshCw, Trophy } from "lucide-react";
-import { supabase, LeaderboardEntry } from "@/lib/supabase";
+import { LeaderboardEntry } from "@/lib/supabase";
 import { LeaderboardTable } from "@/components/leaderboard/LeaderboardTable";
 import { Button } from "@/components/ui/Button";
 import { AppHeader } from "@/components/navigation/AppHeader";
