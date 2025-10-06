@@ -110,11 +110,8 @@ export default function ResultPage() {
   };
 
   const handleLearnMore = () => {
-    // Open external link to learn more about Thalassemia
-    window.open(
-      "https://www.who.int/news-room/fact-sheets/detail/thalassaemia",
-      "_blank"
-    );
+    // Navigate to internal learn page
+    router.push("/learn");
   };
 
   const handleUserInfoSubmit = async () => {
