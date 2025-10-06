@@ -142,14 +142,6 @@ export default function ResultPage() {
     router.push("/");
   };
 
-  const handleViewLeaderboard = () => {
-    router.push("/leaderboard");
-  };
-
-  const handleLearnMore = () => {
-    // Navigate to internal learn page
-    router.push("/learn");
-  };
 
   const handleUserInfoSubmit = async () => {
     setIsSubmitting(true);
@@ -166,6 +158,8 @@ export default function ResultPage() {
         setShowUserInfoForm(false);
         // Clear session data after successful save
         sessionStorage.removeItem("quizResult");
+        // Navigate to leaderboard after successful save
+        router.push("/leaderboard");
       }
     } catch (err) {
       console.error("Error saving user info:", err);
@@ -219,8 +213,6 @@ export default function ResultPage() {
           result={result}
           userName={userName}
           onRetakeQuiz={handleRetakeQuiz}
-          onViewLeaderboard={handleViewLeaderboard}
-          onLearnMore={handleLearnMore}
           questions={questions}
           answers={answers}
           showUserInfoForm={showUserInfoForm}

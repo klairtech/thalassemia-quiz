@@ -82,10 +82,14 @@ export function AppHeader({
 
             {!isLearnPage && (
               <Button
-                variant="ghost"
+                variant={isLeaderboardPage ? "default" : "ghost"}
                 size="sm"
                 onClick={() => router.push("/learn")}
-                className="flex items-center gap-2"
+                className={`flex items-center gap-2 ${
+                  isLeaderboardPage 
+                    ? "bg-gradient-to-r from-[#f14164] to-[#d6335a] hover:from-[#d6335a] hover:to-[#c22d4f] text-white shadow-lg hover:shadow-xl" 
+                    : ""
+                }`}
               >
                 <BookOpen className="h-4 w-4" />
                 Learn

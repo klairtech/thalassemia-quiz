@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Trophy, Clock, Target, Star, Share2, BookOpen } from "lucide-react";
+import { Trophy, Clock, Target, Star, Share2, CheckCircle } from "lucide-react";
 import { QuizResult } from "@/lib/quiz";
 import { QuizQuestion, QuizAnswer } from "@/lib/supabase";
 import { Button } from "@/components/ui/Button";
@@ -11,8 +11,6 @@ interface ResultScreenProps {
   result: QuizResult;
   userName: string;
   onRetakeQuiz: () => void;
-  onViewLeaderboard: () => void;
-  onLearnMore: () => void;
   questions?: QuizQuestion[];
   answers?: QuizAnswer[];
   showUserInfoForm?: boolean;
@@ -32,8 +30,6 @@ export function ResultScreen({
   result,
   userName,
   onRetakeQuiz,
-  onViewLeaderboard,
-  onLearnMore,
   questions = [],
   answers = [],
   showUserInfoForm = false,
@@ -400,52 +396,58 @@ export function ResultScreen({
           </motion.div>
         )}
 
-        {/* Action Buttons */}
+        {/* Enhanced Action Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex flex-col sm:flex-row gap-6 justify-center items-center"
         >
           {showUserInfoForm && (
-            <Button
-              onClick={onUserInfoSubmit}
-              disabled={isSubmitting}
-              size="lg"
-              className="flex items-center gap-2 bg-gradient-to-r from-[#f14164] to-[#d6335a] hover:from-[#d6335a] hover:to-[#c22d4f] text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300"
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+              className="relative"
             >
-              {isSubmitting ? "Saving..." : "Save & Continue"}
-            </Button>
+              {/* Enhanced Save & Continue Button with glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#f14164] to-[#d6335a] rounded-2xl blur-lg opacity-30 scale-110"></div>
+              <Button
+                onClick={onUserInfoSubmit}
+                disabled={isSubmitting}
+                size="lg"
+                className="relative flex items-center gap-3 bg-gradient-to-r from-[#f14164] to-[#d6335a] hover:from-[#d6335a] hover:to-[#c22d4f] text-white font-bold shadow-2xl hover:shadow-3xl transition-all duration-300 px-8 py-4 text-lg rounded-2xl border-2 border-white/20"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Trophy className="h-5 w-5" />
+                    Save & Continue to Leaderboard
+                  </>
+                )}
+              </Button>
+            </motion.div>
           )}
 
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
+        >
           <Button
             onClick={onRetakeQuiz}
             variant="outline"
             size="lg"
-            className="flex items-center gap-2"
+              className="flex items-center gap-3 border-2 border-gray-300 hover:border-[#f14164] hover:bg-[#f14164]/5 text-gray-700 hover:text-[#f14164] font-semibold px-6 py-3 text-base rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
           >
-            <Target className="h-4 w-4" />
+              <Target className="h-5 w-5" />
             Retake Quiz
           </Button>
-
-          <Button
-            onClick={onViewLeaderboard}
-            variant="outline"
-            size="lg"
-            className="flex items-center gap-2"
-          >
-            <Trophy className="h-4 w-4" />
-            View Leaderboard
-          </Button>
-
-          <Button
-            onClick={onLearnMore}
-            size="lg"
-            className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
-          >
-            <BookOpen className="h-4 w-4" />
-            Learn More About Thalassemia
-          </Button>
+          </motion.div>
         </motion.div>
 
         {/* Detailed Explanations Section */}
@@ -459,7 +461,7 @@ export function ResultScreen({
             <Card className="bg-white/90 backdrop-blur-sm border border-white/20 rounded-2xl">
               <CardHeader>
                 <CardTitle className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <BookOpen className="h-6 w-6 text-[#f14164]" />
+                  <Star className="h-6 w-6 text-[#f14164]" />
                   Quiz Review & Explanations
                 </CardTitle>
                 <p className="text-gray-600">
@@ -621,7 +623,7 @@ export function ResultScreen({
                           {question.correct_answer_explanation && (
                             <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                               <h5 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
-                                <BookOpen className="h-4 w-4" />
+                                <CheckCircle className="h-4 w-4" />
                                 Why This Answer is Correct:
                               </h5>
                               <p className="text-blue-700">
