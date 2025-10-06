@@ -24,6 +24,8 @@ interface ResultScreenProps {
   isSubmitting?: boolean;
   saveError?: string | null;
   saveSuccess?: boolean;
+  autoSubmitTimer?: number;
+  isAutoSubmitting?: boolean;
 }
 
 export function ResultScreen({
@@ -43,6 +45,8 @@ export function ResultScreen({
   isSubmitting = false,
   saveError = null,
   saveSuccess = false,
+  autoSubmitTimer = 0,
+  isAutoSubmitting = false,
 }: ResultScreenProps) {
   const getGradeColor = (grade: string) => {
     switch (grade) {
@@ -188,91 +192,211 @@ export function ResultScreen({
             transition={{ duration: 0.5, delay: 0.35 }}
             className="mt-8"
           >
-            <Card className="bg-white/90 backdrop-blur-sm border border-white/20 rounded-2xl">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                  <Star className="h-6 w-6 text-[#f14164]" />
-                  Help Us Track Your Progress
-                </CardTitle>
-                <p className="text-gray-600">
-                  Provide your contact information to help us track quiz
-                  participation and send you updates about Thalassemia awareness
-                  (optional)
-                </p>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* Error Message */}
-                {saveError && (
-                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">!</span>
-                      </div>
-                      <p className="text-red-700 font-medium">
-                        Failed to save quiz attempt
-                      </p>
-                    </div>
-                    <p className="text-red-600 text-sm mt-1">{saveError}</p>
-                  </div>
-                )}
+            <div className="relative">
+              {/* Enhanced background glow */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#f14164]/10 via-blue-100/10 to-[#f14164]/10 rounded-3xl blur-xl"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-blue-50/20 rounded-3xl blur-lg"></div>
 
-                {/* Success Message */}
-                {saveSuccess && (
-                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">✓</span>
-                      </div>
-                      <p className="text-green-700 font-medium">
-                        Quiz attempt saved successfully!
-                      </p>
-                    </div>
-                    <p className="text-green-600 text-sm mt-1">
-                      Your score has been recorded on the leaderboard.
-                    </p>
-                  </div>
-                )}
+              <Card className="relative bg-white/95 backdrop-blur-md border border-white/30 rounded-3xl shadow-2xl overflow-hidden">
+                {/* Decorative top accent */}
+                <div className="h-1 bg-gradient-to-r from-[#f14164] via-blue-500 to-[#f14164]"></div>
 
-                <div>
-                  <label
-                    htmlFor="mobile"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                <CardHeader className="text-center pb-6 pt-8">
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+                    className="relative mx-auto mb-6"
                   >
-                    Mobile Number (Optional)
-                  </label>
-                  <input
-                    id="mobile"
-                    type="tel"
-                    value={userMobile}
-                    onChange={(e) => onMobileChange?.(e.target.value)}
-                    placeholder="Enter your mobile number"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f14164] focus:border-[#f14164] transition-colors"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Email Address (Optional)
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={userEmail}
-                    onChange={(e) => onEmailChange?.(e.target.value)}
-                    placeholder="Enter your email address"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f14164] focus:border-[#f14164] transition-colors"
-                  />
-                </div>
-                <div className="pt-4">
-                  <p className="text-sm text-gray-600 text-center">
-                    Click &quot;Save & Continue&quot; below to save your quiz
-                    results and continue exploring.
+                    {/* Enhanced icon with glow effect */}
+                    <div className="relative w-16 h-16 mx-auto">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#f14164] to-blue-500 rounded-2xl blur-lg opacity-30 scale-110"></div>
+                      <div className="relative w-full h-full bg-gradient-to-br from-[#f14164] to-blue-500 rounded-2xl flex items-center justify-center shadow-xl">
+                        <Star className="h-8 w-8 text-white" />
+                      </div>
+                      {/* Floating accent elements */}
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-blue-400 to-[#f14164] rounded-full shadow-lg"></div>
+                      <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-gradient-to-r from-[#f14164] to-blue-400 rounded-full shadow-md"></div>
+                    </div>
+                  </motion.div>
+
+                  <CardTitle className="text-3xl font-bold text-gray-800 mb-3">
+                    Help Us Track Your Progress
+                  </CardTitle>
+                  <p className="text-gray-600 text-lg leading-relaxed max-w-2xl mx-auto">
+                    Join our community of Thalassemia awareness warriors! Share
+                    your contact information to help us track quiz participation
+                    and send you updates about Thalassemia awareness.
                   </p>
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#f14164]/10 to-blue-100/10 rounded-full border border-[#f14164]/20">
+                    <div className="w-2 h-2 bg-[#f14164] rounded-full animate-pulse"></div>
+                    <span className="text-sm text-[#f14164] font-medium">
+                      All fields are optional
+                    </span>
+                  </div>
+                </CardHeader>
+                <CardContent className="px-8 pb-8">
+                  {/* Error Message */}
+                  {saveError && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-xl"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center">
+                          <span className="text-white text-sm font-bold">
+                            !
+                          </span>
+                        </div>
+                        <div>
+                          <p className="text-red-700 font-semibold">
+                            Failed to save quiz attempt
+                          </p>
+                          <p className="text-red-600 text-sm mt-1">
+                            {saveError}
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Success Message */}
+                  {saveSuccess && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="mb-6 p-4 bg-green-50 border-2 border-green-200 rounded-xl"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                          <span className="text-white text-sm font-bold">
+                            ✓
+                          </span>
+                        </div>
+                        <div>
+                          <p className="text-green-700 font-semibold">
+                            Quiz attempt saved successfully!
+                          </p>
+                          <p className="text-green-600 text-sm mt-1">
+                            Your score has been recorded on the leaderboard.
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Mobile Number Field */}
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.5 }}
+                      className="space-y-3"
+                    >
+                      <label
+                        htmlFor="mobile"
+                        className="block text-sm font-semibold text-gray-700 flex items-center gap-2"
+                      >
+                        <div className="w-6 h-6 bg-gradient-to-r from-[#f14164] to-blue-500 rounded-md flex items-center justify-center">
+                          <span className="text-white text-xs font-bold">
+                            📱
+                          </span>
+                        </div>
+                        Mobile Number
+                        <span className="text-xs text-gray-500 font-normal">
+                          (Optional)
+                        </span>
+                      </label>
+                      <div className="relative">
+                        <input
+                          id="mobile"
+                          type="tel"
+                          value={userMobile}
+                          onChange={(e) => onMobileChange?.(e.target.value)}
+                          placeholder="Enter your mobile number"
+                          className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#f14164]/20 focus:border-[#f14164] transition-all duration-300 bg-white/80 backdrop-blur-sm text-base placeholder-gray-400"
+                        />
+                        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#f14164]/5 to-blue-100/5 pointer-events-none"></div>
+                      </div>
+                    </motion.div>
+
+                    {/* Email Field */}
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.6 }}
+                      className="space-y-3"
+                    >
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-semibold text-gray-700 flex items-center gap-2"
+                      >
+                        <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-[#f14164] rounded-md flex items-center justify-center">
+                          <span className="text-white text-xs font-bold">
+                            ✉️
+                          </span>
+                        </div>
+                        Email Address
+                        <span className="text-xs text-gray-500 font-normal">
+                          (Optional)
+                        </span>
+                      </label>
+                      <div className="relative">
+                        <input
+                          id="email"
+                          type="email"
+                          value={userEmail}
+                          onChange={(e) => onEmailChange?.(e.target.value)}
+                          placeholder="Enter your email address"
+                          className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#f14164]/20 focus:border-[#f14164] transition-all duration-300 bg-white/80 backdrop-blur-sm text-base placeholder-gray-400"
+                        />
+                        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-100/5 to-[#f14164]/5 pointer-events-none"></div>
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  {/* Enhanced instruction text with timer */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 }}
+                    className="mt-6 p-4 bg-gradient-to-r from-[#f14164]/5 via-blue-100/5 to-[#f14164]/5 rounded-xl border border-[#f14164]/10"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-r from-[#f14164] to-blue-500 rounded-lg flex items-center justify-center">
+                        <span className="text-white text-sm">💡</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-gray-700 font-medium">
+                          Ready to save your progress?
+                        </p>
+                        <p className="text-gray-600 text-sm mt-1">
+                          Click &quot;Save & Continue&quot; below to record your
+                          quiz results and continue exploring our platform.
+                        </p>
+                      </div>
+                      {autoSubmitTimer > 0 && (
+                        <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-[#f14164]/10 to-blue-100/10 rounded-lg border border-[#f14164]/20">
+                          <div className="w-2 h-2 bg-[#f14164] rounded-full animate-pulse"></div>
+                          <span className="text-sm text-[#f14164] font-semibold">
+                            Auto-submit in {autoSubmitTimer}s
+                          </span>
+                        </div>
+                      )}
+                      {isAutoSubmitting && (
+                        <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-100/10 to-[#f14164]/10 rounded-lg border border-blue-200/20">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                          <span className="text-sm text-blue-600 font-semibold">
+                            Auto-submitting...
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                </CardContent>
+              </Card>
+            </div>
           </motion.div>
         )}
 

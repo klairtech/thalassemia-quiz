@@ -31,6 +31,8 @@ export default function ResultPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [autoSubmitTimer, setAutoSubmitTimer] = useState(30);
+  const [isAutoSubmitting, setIsAutoSubmitting] = useState(false);
 
   useEffect(() => {
     const processResult = async () => {
@@ -67,6 +69,25 @@ export default function ResultPage() {
 
     processResult();
   }, [router]);
+
+  // Auto-submit timer effect
+  useEffect(() => {
+    if (!showUserInfoForm || isSubmitting || saveSuccess) return;
+
+    const timer = setInterval(() => {
+      setAutoSubmitTimer((prev) => {
+        if (prev <= 1) {
+          // Auto-submit when timer reaches 0
+          setIsAutoSubmitting(true);
+          handleUserInfoSubmit();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [showUserInfoForm, isSubmitting, saveSuccess]);
 
   const saveQuizAttempt = async (
     resultData: QuizResultData,
@@ -134,7 +155,8 @@ export default function ResultPage() {
     setIsSubmitting(true);
     setSaveError(null);
     setSaveSuccess(false);
-
+    setAutoSubmitTimer(0); // Stop the timer
+    
     try {
       // Get result data from sessionStorage
       const resultDataStr = sessionStorage.getItem("quizResult");
@@ -150,6 +172,7 @@ export default function ResultPage() {
       // Error is already handled in saveQuizAttempt
     } finally {
       setIsSubmitting(false);
+      setIsAutoSubmitting(false);
     }
   };
 
@@ -192,23 +215,25 @@ export default function ResultPage() {
   }
 
   return (
-    <ResultScreen
-      result={result}
-      userName={userName}
-      onRetakeQuiz={handleRetakeQuiz}
-      onViewLeaderboard={handleViewLeaderboard}
-      onLearnMore={handleLearnMore}
-      questions={questions}
-      answers={answers}
-      showUserInfoForm={showUserInfoForm}
-      userMobile={userMobile}
-      userEmail={userEmail}
-      onMobileChange={setUserMobile}
-      onEmailChange={setUserEmail}
-      onUserInfoSubmit={handleUserInfoSubmit}
-      isSubmitting={isSubmitting}
-      saveError={saveError}
-      saveSuccess={saveSuccess}
-    />
+        <ResultScreen
+          result={result}
+          userName={userName}
+          onRetakeQuiz={handleRetakeQuiz}
+          onViewLeaderboard={handleViewLeaderboard}
+          onLearnMore={handleLearnMore}
+          questions={questions}
+          answers={answers}
+          showUserInfoForm={showUserInfoForm}
+          userMobile={userMobile}
+          userEmail={userEmail}
+          onMobileChange={setUserMobile}
+          onEmailChange={setUserEmail}
+          onUserInfoSubmit={handleUserInfoSubmit}
+          isSubmitting={isSubmitting}
+          saveError={saveError}
+          saveSuccess={saveSuccess}
+          autoSubmitTimer={autoSubmitTimer}
+          isAutoSubmitting={isAutoSubmitting}
+        />
   );
 }
