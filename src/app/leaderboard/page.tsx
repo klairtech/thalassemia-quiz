@@ -11,7 +11,10 @@ import { AppHeader } from "@/components/navigation/AppHeader";
 
 export default function LeaderboardPage() {
   const router = useRouter();
-  const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
+  const [topEntries, setTopEntries] = useState<LeaderboardEntry[]>([]);
+  const [currentUser, setCurrentUser] = useState<LeaderboardEntry | null>(null);
+  const [currentUserRank, setCurrentUserRank] = useState<number | null>(null);
+  const [totalEntries, setTotalEntries] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,15 +27,39 @@ export default function LeaderboardPage() {
       setIsLoading(true);
       setError(null);
 
+      // Get current user info from sessionStorage
+      const userName = sessionStorage.getItem("userName");
+      const userMobile = sessionStorage.getItem("userMobile");
+      const userEmail = sessionStorage.getItem("userEmail");
+
+      // If no user identification found, show message
+      if (!userName && !userMobile && !userEmail) {
+        setError(
+          "Please take a quiz first to see your position on the leaderboard."
+        );
+        setIsLoading(false);
+        return;
+      }
+
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (userName) params.append("currentUserName", userName);
+      if (userMobile) params.append("currentUserMobile", userMobile);
+      if (userEmail) params.append("currentUserEmail", userEmail);
+
       // Fetch leaderboard data from API route
-      const response = await fetch("/api/leaderboard?limit=50");
+      const response = await fetch(`/api/leaderboard?${params.toString()}`);
 
       if (!response.ok) {
         throw new Error("Failed to load leaderboard");
       }
 
-      const { entries: data } = await response.json();
-      setEntries(data || []);
+      const { topEntries, currentUser, currentUserRank, totalEntries } =
+        await response.json();
+      setTopEntries(topEntries || []);
+      setCurrentUser(currentUser);
+      setCurrentUserRank(currentUserRank);
+      setTotalEntries(totalEntries || 0);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -117,7 +144,13 @@ export default function LeaderboardPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <LeaderboardTable entries={entries} isLoading={isLoading} />
+            <LeaderboardTable
+              topEntries={topEntries}
+              currentUser={currentUser}
+              currentUserRank={currentUserRank}
+              totalEntries={totalEntries}
+              isLoading={isLoading}
+            />
           </motion.div>
         )}
 

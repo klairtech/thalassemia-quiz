@@ -44,9 +44,11 @@ export interface QuizAnswer {
 
 export interface LeaderboardEntry {
   user_name: string
+  user_mobile: string
+  user_email?: string
   best_score: number
   best_time: number
   total_attempts: number
   last_attempt: string
-  user_hash: string // MD5 hash for internal identification without exposing PII
+  user_hash?: string // MD5 hash for internal identification without exposing PII
 }

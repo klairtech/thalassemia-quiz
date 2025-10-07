@@ -1,10 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { WizardOnboarding } from "@/components/onboarding/WizardOnboarding";
 
 export default function Home() {
   const router = useRouter();
+
+  // Reset session when user reaches landing page
+  useEffect(() => {
+    // Clear all session data to start fresh
+    sessionStorage.clear();
+  }, []);
 
   const handleOnboardingSubmit = (data: { name: string; language: string }) => {
     // Store user data in sessionStorage for the quiz session
